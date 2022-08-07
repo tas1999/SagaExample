@@ -10,7 +10,7 @@ import (
 type Repository interface {
 	AddOrder(order Order) (int, error)
 	ChangeOrder(order Order) error
-	GetOrder(orderId string) (*Order, error)
+	GetOrder(orderId int) (*Order, error)
 }
 type Produser interface {
 	SendAddOrderEvent(order Order) error
@@ -39,6 +39,16 @@ func main() {
 		Host:  "kafka",
 		Port:  9092,
 	})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	cons, err := NewConsumer(OrderProduserConfig{
+		Topic: "order.check.result",
+		Host:  "kafka",
+		Port:  9092,
+	}, rep, prod)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -79,7 +89,7 @@ func main() {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(200)
 	})
-	//cons.Start()
+	go cons.Start()
 	s := &http.Server{
 		Addr: ":8080",
 	}

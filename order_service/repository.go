@@ -52,7 +52,7 @@ func (r *OrderRepository) ChangeOrder(order Order) error {
 	}
 	return nil
 }
-func (r *OrderRepository) GetOrder(orderId string) (*Order, error) {
+func (r *OrderRepository) GetOrder(orderId int) (*Order, error) {
 	rows, err := r.db.Query("select id, name,price,status,user_id from orders where id=$1", orderId)
 	if err != nil {
 		return nil, err
