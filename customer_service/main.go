@@ -49,6 +49,10 @@ func main() {
 		Host:  "kafka",
 		Port:  9092,
 	}, rep, prod)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	http.HandleFunc("/AddCustomer", func(w http.ResponseWriter, r *http.Request) {
 		var order Customer
 		defer r.Body.Close()
